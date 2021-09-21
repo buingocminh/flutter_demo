@@ -24,13 +24,19 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex =0;
+  final tabs= [
+    const Center(child: Text('Today')),
+    const Center(child: Text('All')),
+    const Center(child: Text('Add')),
+    const Center(child: Text('Setting'))
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Schedule Today') ,
       ),
-      body: Container(),
+      body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.fixed,
@@ -60,7 +66,6 @@ class _HomeState extends State<Home> {
           setState(() {
             _currentIndex= index;
           });
-          print(_currentIndex);
         },
       ),
     );
