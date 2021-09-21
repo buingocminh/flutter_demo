@@ -29,7 +29,8 @@ class _HomeState extends State<Home> {
     const Center(child: Text('Today')),
     const Center(child: Text('All')),
     const Center(child: Text('Add')),
-    const Center(child: Text('Setting'))
+    const Center(child: Text('Setting')),
+    const Center(child: Text('shit'))
   ];
   @override
   Widget build(BuildContext context) {
