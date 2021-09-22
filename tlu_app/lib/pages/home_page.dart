@@ -11,7 +11,7 @@ class _HomeState extends State<Home> {
   final tabs= [
     const Center(child: Text('Today')),
     const Center(child: Text('All')),
-    const Center(child: Text('Add')),
+    Center(child: TextButton(onPressed: (){ print('object');}, child: co Text('1')),),
     const Center(child: Text('Setting')),
     const Center(child: Text('shit'))
   ];
