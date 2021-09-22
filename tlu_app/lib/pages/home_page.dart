@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widget/dummy_centrel.dart';
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
   @override
@@ -8,10 +9,11 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int _currentIndex =0;
-  final tabs= [
+   var tabs= [
     const Center(child: Text('Today')),
     const Center(child: Text('All')),
-    Center(child: TextButton(onPressed: (){ print('object');}, child: co Text('1')),),
+
+     dummy(),
     const Center(child: Text('Setting')),
     const Center(child: Text('shit'))
   ];
