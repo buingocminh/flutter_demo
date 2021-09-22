@@ -12,7 +12,8 @@ class _HomeState extends State<Home> {
    var tabs= [
     const Center(child: Text('Today')),
     const Center(child: Text('All')),
-    dummy(),
+
+     dummy(),
     const Center(child: Text('Setting')),
     const Center(child: Text('shit'))
   ];

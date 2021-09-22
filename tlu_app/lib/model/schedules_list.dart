@@ -1,11 +1,11 @@
-import 'dart:convert';
+
+ import 'dart:convert';
 
 import './schedule.dart';
 import 'package:http/http.dart' as http;
 
 class Schedules_list {
   List<Schedule> _schedulesList = [];
-
   List get schedules_list {
     return _schedulesList.toList();
   }
