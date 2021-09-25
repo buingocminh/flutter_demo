@@ -1,28 +1,24 @@
-
- import 'dart:convert';
-
+import 'dart:convert';
 import 'package:intl/intl.dart';
-
 import './schedule.dart';
 import 'package:http/http.dart' as http;
-
 class Schedules_list {
   List<Schedule> schedulesList = [];
   // List get schedules_list {
   //   return _schedulesList.toList();
   // }
 
-  
+
   List<Schedule> GetListfromday( String dayint){
     List<Schedule> list = [];
     var day = DateTime.parse(dayint);
     schedulesList.forEach((schedule) {
-       if (schedule.startDate.isBefore(day)&&schedule.endDate.isAfter(day))  list.add(schedule) ;
+      if (schedule.startDate.isBefore(day)&&schedule.endDate.isAfter(day))  list.add(schedule) ;
     },);
     print(list);
     return list;
   }
-  
+
   var url =
       "https://testproject-htminhk-default-rtdb.asia-southeast1.firebasedatabase.app/Schedule.json";
 
@@ -32,28 +28,27 @@ class Schedules_list {
     final List<Schedule> list = [];
     datas.forEach((scheduleId, value) {
       list.add(Schedule(
-          id: scheduleId,
-          name: value["name"],
+          nameSubject: value["nameSubject"],
           room: value["room"],
-          time: value["time"],
-          startDate: value["start"],
-          endDate: value["end"],
-          teacher: value["abc"]));
+          timeBegin: value["timeBegin"],
+          startDate: value["startDate"],
+          endDate: value["endDate"],
+          dayAction: value["dayAction"]));
     });
     schedulesList = list;
   }
   // void convert(){;
   //   print(DateFormat("dd/MM/yyyy").format(DateTime.parse("2020-10-10")));
   // }
-  Future<bool> AddSchedule(name, time, room, start, end, teacher) async {
+  Future<bool> AddSchedule(name, time, room, start, end, dayAction) async {
     final res = await http.post(Uri.parse(url),
         body: jsonEncode({
-          "name": name,
+          "nameSubject": name,
           "room": room,
-          "start": start,
-          "end": end,
-          "time":time,
-          "teacher": teacher
+          "startDate": start,
+          "endDate": end,
+          "imeBegin":time,
+          "dayAction": dayAction
         }));
     if (res.statusCode == 200)
       return true;
