@@ -18,7 +18,13 @@ class Schedules_list {
     print(list);
     return list;
   }
-
+  DateTime getfinalDay (){
+    DateTime finalDay= DateTime.parse("0000-00-00") ;
+    schedulesList.forEach((element) {
+      if (element.endDate.isBefore(finalDay)) finalDay=element.endDate;
+    });
+    return finalDay;
+  }
   var url =
       "https://testproject-htminhk-default-rtdb.asia-southeast1.firebasedatabase.app/Schedule.json";
 
@@ -27,13 +33,15 @@ class Schedules_list {
     final datas = jsonDecode(res.body) as Map<String, dynamic>;
     final List<Schedule> list = [];
     datas.forEach((scheduleId, value) {
-      list.add(Schedule(
+      var schedule =Schedule(
           nameSubject: value["nameSubject"],
           room: value["room"],
           timeBegin: value["timeBegin"],
           startDate: value["startDate"],
           endDate: value["endDate"],
-          dayAction: value["dayAction"]));
+          dayAction: value["dayAction"]);
+      schedule.id=scheduleId;
+      list.add(schedule);
     });
     schedulesList = list;
   }
