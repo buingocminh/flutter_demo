@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../model/schedules_list.dart';
-import '../model/schedule.dart';
 
 class dummy extends StatefulWidget {
   const dummy({Key? key}) : super(key: key);
@@ -15,37 +13,34 @@ class _dummyState extends State<dummy> {
   var isloading = false;
   final formkey = GlobalKey<FormState>();
   final list = Schedules_list();
-
   void callsomething() async {
     formkey.currentState!.save();
     savelist["start"]=startDate.toString();
-    savelist["end"]=endDate.toString();
-    print(savelist);
+    print('den day roi ');
+    savelist["end"]=startDate.toString();
     setState(() {
       isloading = true;
     });
-    await list.AddSchedule(savelist["name"], savelist["time"], savelist["room"],
-            savelist["start"], savelist["end"], savelist["teacher"])
+    await list.addSchedule(savelist["name"], savelist["time"], savelist["room"],
+            savelist["start"], savelist["end"], savelist["DayAction"])
         .then((res) => setState(() {
               isloading = false;
             }));
   }
-
   void getfile() async {
     await  list.GetList().then((_) => null);
   }
-
-  var startDate, endDate;
+  var startDate = DateTime.now(), endDate= DateTime.now();
   Map <String,dynamic> savelist =  {
     "name": null,
     "room": null,
     "start": null,
     "end": null,
-    "teacher": null,
+    "DayAction": null,
     "time": null
   };
-
   void _Showdate(date) {
+    print(date);
     showDatePicker(
             context: context,
             initialDate: DateTime.now(),
@@ -53,67 +48,108 @@ class _dummyState extends State<dummy> {
             lastDate: DateTime(2050))
         .then((value) => setState(() {
               if (date == "start") {
-                startDate = value;
-                savelist["start"] = value as String;
+                startDate = value!;
+                // savelist["start"] = value as String;
               } else {
-                endDate = value;
-                savelist["end"] = value as String;
+                endDate = value!;
+                // savelist["end"] = value as String;
+                print(endDate.toString());
               }
             }));
-    print(savelist);
+    // print(savelist["start"]);
   }
-
-
-
   @override
   Widget build(BuildContext context) {
     return isloading
-        ? Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator())
         : SingleChildScrollView(
-            child: Form(
-                key: formkey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "name"),
-                      onSaved: (res) => savelist["name"] = res!,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Time"),
-                      onSaved: (res) => savelist["time"] = res!,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Room"),
-                      onSaved: (res) => savelist["room"] = res!,
-                    ),
-                    Row(
-                      children: [
-                        Text((startDate == null)
-                            ? "startdate"
-                            : DateFormat("dd-MM-yyyy").format(startDate)),
-                        ElevatedButton(
-                            onPressed: () => _Showdate("start"),
-                            child: Text("date"))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text((endDate == null)
-                            ? "enddate"
-                            : DateFormat("dd-MM-yyyy").format(endDate)),
-                        ElevatedButton(
-                            onPressed: () => _Showdate("end"),
-                            child: Text("date"))
-                      ],
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Teacher"),
-                      onSaved: (res) => savelist["teacher"] = res!,
-                    ),
-                    TextButton(onPressed: callsomething, child: Text("save")),
-                    TextButton(onPressed: getfile, child: Text("get"))
-                  ],
-                )),
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Form(
+                  key: formkey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            labelText: "Môn học",
+                        ),
+                        onSaved: (res) => savelist["name"] = res!,
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            labelText: "Phòng học"),
+                        onSaved: (res) => savelist["room"] = res!,
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            labelText: "Tiết"),
+                        onSaved: (res) => savelist["time"] = res!,
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      TextFormField(
+                        decoration: const InputDecoration(
+                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            labelText: "Ngày học"),
+                        onSaved: (res) => savelist["DayAction"] = res!,
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      Row(
+                        children: [
+                          const Text("Ngày bắt đầu:" ),
+                          const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                           Expanded(
+                            child: Text(DateFormat("dd-MM-yyyy").format(startDate)),
+                          ),
+                          ElevatedButton(
+                              onPressed: () => _Showdate("start"),
+                              child: const Icon(Icons.date_range_outlined))
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      Row(
+                        children: [
+                          const Text("Ngày kết thúc:" ),
+                          const Padding(padding: EdgeInsets.symmetric(horizontal: 10)),
+                          Expanded(
+                            child: Text(DateFormat("dd-MM-yyyy").format(endDate)),
+                          ),
+                          ElevatedButton(
+                              onPressed: () => _Showdate("end"),
+                              child: const Icon(Icons.date_range_outlined))
+                        ],
+                      ),
+                      const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+                      ElevatedButton(
+                        child: const Text('Save'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.teal,
+                          onPrimary: Colors.white,
+                          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                          minimumSize:  const Size(100, 40),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                        ),
+                        onPressed: callsomething,
+                      ),
+
+                      ElevatedButton(
+                        child: const Text('Get'),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.teal,
+                          onPrimary: Colors.white,
+                          padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
+                          minimumSize:  const Size(100, 40),
+                          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                        ),
+                        onPressed: getfile,
+                      ),
+                    ],
+                  )),
+            ),
           );
   }
 }
