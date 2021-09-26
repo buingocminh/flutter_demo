@@ -18,8 +18,6 @@ class Schedule {
     required this.startDate,
     required this.endDate,
     required this.timeBegin,
-    required this.dayAction}) {
-
-  }
+    required this.dayAction});
 
 }
