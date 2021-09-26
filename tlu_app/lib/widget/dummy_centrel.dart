@@ -11,12 +11,13 @@ class dummy extends StatefulWidget {
 
 class _dummyState extends State<dummy> {
   var isloading = false;
+  int valueChoose=2;
   final formkey = GlobalKey<FormState>();
   final list = Schedules_list();
   void callsomething() async {
     formkey.currentState!.save();
+    savelist["DayAction"]= valueChoose;
     savelist["start"]=startDate.toString();
-    print('den day roi ');
     savelist["end"]=startDate.toString();
     setState(() {
       isloading = true;
@@ -39,6 +40,9 @@ class _dummyState extends State<dummy> {
     "DayAction": null,
     "time": null
   };
+  List<String> listItems =['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','Chủ nhật'];
+  List<int> listValue=[2,3,4,5,6,7,0];
+  // late int valueChoose=listValue[0];
   void _Showdate(date) {
     print(date);
     showDatePicker(
@@ -58,6 +62,31 @@ class _dummyState extends State<dummy> {
             }));
     // print(savelist["start"]);
   }
+  Widget buildListPicker()=>SizedBox(
+
+      child: DropdownButton<int>(
+        value: valueChoose,
+        icon: const Icon(Icons.arrow_drop_down),
+        iconSize: 30,
+        elevation: 16,
+        style: const TextStyle(color: Colors.grey),
+        underline: Container(
+          height: 2,
+          color: Colors.grey,
+        ),
+        onChanged: (int? newValue) {
+          setState(() {
+            valueChoose = newValue! ;
+          });
+        },
+        items: listValue.map<DropdownMenuItem<int>>((int Svalue) {
+          return DropdownMenuItem<int>(
+            value: Svalue,
+            child: Text("Thứ $Svalue", style: const TextStyle(fontSize: 20),),
+          );
+        }).toList(),
+      )
+  );
   @override
   Widget build(BuildContext context) {
     return isloading
@@ -91,11 +120,12 @@ class _dummyState extends State<dummy> {
                         onSaved: (res) => savelist["time"] = res!,
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                            labelText: "Ngày học"),
-                        onSaved: (res) => savelist["DayAction"] = res!,
+                      Row(
+                        children: [
+                          const Text('Ngày học:',style: TextStyle(fontSize: 20, color: Colors.grey),),
+                          const Padding(padding: EdgeInsets.symmetric(horizontal: 15)),
+                          buildListPicker()
+                        ],
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                       Row(
