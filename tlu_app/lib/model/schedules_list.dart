@@ -55,7 +55,7 @@ class Schedules_list {
   // void convert(){;
   //   print(DateFormat("dd/MM/yyyy").format(DateTime.parse("2020-10-10")));
   // }
-  Future<bool> AddSchedule(name, time, room, start, end, dayAction) async {
+  Future<bool> addSchedule(name, time, room, start, end, dayAction) async {
     final res = await http.post(Uri.parse(url),
         body: jsonEncode({
           "nameSubject": name,
