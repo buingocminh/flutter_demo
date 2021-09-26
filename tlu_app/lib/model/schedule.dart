@@ -1,7 +1,8 @@
 import 'dart:math';
 
+
 class Schedule {
-  int id = Random().nextInt(100);
+  String id = Random().nextInt(100).toString();// sửa tạm
   final String nameSubject;
   late final String nameClass;
   final String room;
@@ -19,5 +20,7 @@ class Schedule {
     required this.endDate,
     required this.timeBegin,
     required this.dayAction});
-
+  void data (){
+    print(nameSubject+room+startDate.toString()+endDate.toString()+timeBegin+dayAction.toString());
+  }
 }
