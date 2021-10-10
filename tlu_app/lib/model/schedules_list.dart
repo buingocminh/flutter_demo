@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
+
 import './schedule.dart';
 import 'package:http/http.dart' as http;
 
 class Schedules_list {
   List<Schedule> schedulesList = [];
+  DateTime now =  DateTime.now();
 
   // List get schedules_list {
   //   return _schedulesList.toList();
@@ -19,7 +21,6 @@ class Schedules_list {
           list.add(schedule);
       },
     );
-    print(list);
     return list;
   }
 
@@ -50,6 +51,35 @@ class Schedules_list {
       list.add(schedule);
     });
     schedulesList = list;
+  }
+  Future<List<Schedule>> getListToday() async{
+    final res = await http.get(Uri.parse(url));
+    final datas = jsonDecode(res.body) as Map<String, dynamic>;
+    final List<Schedule> list=[];
+    datas.forEach((scheduleId, value) {
+      print("vào đây");
+      print(value["dayAction"]);
+      print(DateFormat('EEEE').format(now));
+      print(DateTime.parse(value["startDate"]));
+      DateTime before= DateTime.parse(value["startDate"]);
+      DateTime after =DateTime.parse(value["endDate"]);
+      if( DateTime.parse(value["startDate"]).isBefore(now) && DateTime.parse(value["endDate"]).isAfter(now)) {
+        print("ko lỗi");
+      }
+      if(DateFormat('EEEE').format(now)== value["dayAction"] ){
+        print("vào đi");
+        var schedule = Schedule(
+            nameSubject: value["nameSubject"],
+            room: value["room"],
+            timeBegin: value["imeBegin"],
+            startDate: DateTime.parse(value["startDate"]),
+            endDate: DateTime.parse(value["endDate"]),
+            dayAction: value["dayAction"]);
+        schedule.id = scheduleId;
+        list.add(schedule);
+      }
+    });
+    return list;
   }
 
   // void convert(){;

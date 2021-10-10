@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tlu_app/widget/today_widget.dart';
 
 import '../widget/dummy_centrel.dart';
 class Home extends StatefulWidget {
@@ -10,10 +11,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _currentIndex =0;
    var tabs= [
-    const Center(child: Text('Today')),
+    const TodayPage(),
     const Center(child: Text('All')),
-
-     dummy(),
+     const dummy(),
     const Center(child: Text('Setting')),
     const Center(child: Text('shit'))
   ];

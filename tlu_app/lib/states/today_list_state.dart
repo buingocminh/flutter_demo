@@ -9,6 +9,7 @@ abstract class TodayListState extends Equatable{
 }
 class TodayListStateInitial extends TodayListState{}
 class TodayListStateLoading extends TodayListState{}
+class TodayListStateFailure extends TodayListState{}
 class TodayListStateSuccess extends TodayListState{
     final List<Schedule> scheduleToday;
     const TodayListStateSuccess({required this.scheduleToday});

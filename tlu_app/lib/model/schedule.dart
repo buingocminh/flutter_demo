@@ -10,7 +10,7 @@ class Schedule {
   final DateTime startDate;
   final DateTime endDate;
   final String timeBegin;
-  final int dayAction;
+  final String dayAction;
   late final String teacher;
 
   Schedule({

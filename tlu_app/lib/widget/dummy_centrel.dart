@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../model/schedules_list.dart';
@@ -11,11 +12,14 @@ class dummy extends StatefulWidget {
 
 class _dummyState extends State<dummy> {
   var isloading = false;
-  int valueChoose=2;
+  DateTime now = DateTime.now();
+  String valueChoose='Monday';
+  DateTime time = DateTime.now();
   final formkey = GlobalKey<FormState>();
   final list = Schedules_list();
   void callsomething() async {
     formkey.currentState!.save();
+    savelist["time"]= DateFormat('HH:mm').format(time);
     savelist["DayAction"]= valueChoose;
     savelist["start"]=startDate.toString();
     savelist["end"]=startDate.toString();
@@ -40,7 +44,7 @@ class _dummyState extends State<dummy> {
     "DayAction": null,
     "time": null
   };
-  List<String> listItems =['Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7','Chủ nhật'];
+  List<String> listItems =['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
   List<int> listValue=[2,3,4,5,6,7,0];
   // late int valueChoose=listValue[0];
   void _Showdate(date) {
@@ -57,14 +61,13 @@ class _dummyState extends State<dummy> {
               } else {
                 endDate = value!;
                 // savelist["end"] = value as String;
-                print(endDate.toString());
               }
             }));
     // print(savelist["start"]);
   }
   Widget buildListPicker()=>SizedBox(
 
-      child: DropdownButton<int>(
+      child: DropdownButton<String>(
         value: valueChoose,
         icon: const Icon(Icons.arrow_drop_down),
         iconSize: 30,
@@ -74,19 +77,33 @@ class _dummyState extends State<dummy> {
           height: 2,
           color: Colors.grey,
         ),
-        onChanged: (int? newValue) {
+        onChanged: (String? newValue) {
           setState(() {
             valueChoose = newValue! ;
           });
         },
-        items: listValue.map<DropdownMenuItem<int>>((int Svalue) {
-          return DropdownMenuItem<int>(
+        items: listItems.map<DropdownMenuItem<String>>((String Svalue) {
+          return DropdownMenuItem<String>(
             value: Svalue,
-            child: Text("Thứ $Svalue", style: const TextStyle(fontSize: 20),),
+            child: Text(Svalue, style: const TextStyle(fontSize: 20),),
           );
         }).toList(),
       )
   );
+  Widget buildTimePicker() => SizedBox(
+    height: 100,
+    width: 200,
+    child: CupertinoDatePicker(
+      // initialDateTime: time,
+      mode: CupertinoDatePickerMode.time,
+      minuteInterval: 5,
+      initialDateTime: DateTime(now.year, now.month, now.day, now.hour, (now.minute % 5 * 5).toInt()),
+      use24hFormat: true,
+      onDateTimeChanged: (dateTime) =>
+          setState(() => time = dateTime),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return isloading
@@ -113,11 +130,12 @@ class _dummyState extends State<dummy> {
                         onSaved: (res) => savelist["room"] = res!,
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
-                            labelText: "Tiết"),
-                        onSaved: (res) => savelist["time"] = res!,
+                      Row(
+                        children: [
+                          const Text('bắt đầu từ:',style: TextStyle(fontSize: 20, color: Colors.grey),),
+                          const Padding(padding: EdgeInsets.symmetric(horizontal: 15)),
+                          buildTimePicker()
+                        ],
                       ),
                       const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
                       Row(
